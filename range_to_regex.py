@@ -60,7 +60,7 @@ def range_to_regex(lo: str, hi: str) -> str:
         mid = (
             "|"
             + "[0-9]?" * (first_nonzero - 2)
-            + "[1-9]"
+            + "[0-9]"  # this allows for one leading zero. Not ideal, but okay
             + "[0-9]" * (len(lo_leadzero) - first_nonzero)
             + "|"
             if len(hi) - len(lo) > 1
@@ -104,7 +104,3 @@ def match_up(lo: str, prefix="") -> str:
     range_k = f"[{int(lo[0]) + 1}-9]"
     range_k += "".join(["[0-9]" for _ in lo[1:]])
     return f"{prefix}{range_k}|{match_up(lo[1:], prefix=prefix + lo[0])}"
-
-
-if __name__ == "__main__":
-    print("^(" + range_to_regex("91", "100") + ")$")

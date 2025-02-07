@@ -57,15 +57,11 @@ def range_to_regex(lo: str, hi: str) -> str:
             (i for i, l in enumerate(lo_leadzero) if l != "0"), len(lo_leadzero) - 1
         )
 
-        mid = (
-            "|"
-            + "[0-9]?" * (first_nonzero - 2)
-            + "[0-9]"  # this allows for one leading zero. Not ideal, but okay
-            + "[0-9]" * (len(lo_leadzero) - first_nonzero)
-            + "|"
-            if len(hi) - len(lo) > 1
-            else "|"
-        )
+        mid = "|"
+        if len(hi) - len(lo) > 1:
+            for i in range(1, first_nonzero):
+                mid += "[1-9]" + "[0-9]" * (len(lo_leadzero) - i - 1) + "|"
+
         pattern = bottom + mid + top
 
     return pattern
